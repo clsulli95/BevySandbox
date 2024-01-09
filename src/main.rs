@@ -1,16 +1,26 @@
 pub mod game;
-pub mod menu;
+pub mod settings;
+pub mod splash;
+pub mod util;
+
 use bevy::prelude::*;
-use menu::components::GameState;
+
+// Enum that will be used as a global state for the game
+#[derive(Clone, Copy, Default, Eq, PartialEq, Debug, Hash, States)]
+pub enum GameState {
+    #[default]
+    Splash,
+    Menu,
+    Game,
+}
 
 fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
-        .insert_resource(menu::components::DisplayQuality::Medium)
-        .insert_resource(menu::components::Volume(7))
         .add_state::<GameState>()
         .add_systems(Startup, setup)
-        .add_plugins(menu::splash::SplashPlugin)
+        .add_plugins(settings::plugin::SettingsPlugin)
+        .add_plugins(splash::plugin::SplashPlugin)
         .add_plugins(game::plugin::GamePlugin)
         .run();
 }

@@ -1,19 +1,18 @@
 use bevy::prelude::*;
 
-use crate::menu::components::DisplayQuality;
-use crate::menu::components::{self, Volume};
-use crate::menu::util;
+use crate::settings::plugin::{DisplayQuality, Volume};
+use crate::util;
 
 #[allow(clippy::module_name_repetitions)]
 pub struct GamePlugin;
 
 impl Plugin for GamePlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(OnEnter(components::GameState::Game), game_setup)
-            .add_systems(Update, game.run_if(in_state(components::GameState::Game)))
+        app.add_systems(OnEnter(crate::GameState::Game), game_setup)
+            .add_systems(Update, game.run_if(in_state(crate::GameState::Game)))
             .add_systems(
-                OnExit(components::GameState::Game),
-                util::despawn_screen::<OnGameScreen>,
+                OnExit(crate::GameState::Game),
+                util::spawn::despawn_screen::<OnGameScreen>,
             );
     }
 }
@@ -25,11 +24,7 @@ struct OnGameScreen;
 struct GameTimer(Timer);
 
 #[allow(clippy::needless_pass_by_value)]
-fn game_setup(
-    mut commands: Commands,
-    display_quality: Res<components::DisplayQuality>,
-    volume: Res<components::Volume>,
-) {
+fn game_setup(mut commands: Commands, display_quality: Res<DisplayQuality>, volume: Res<Volume>) {
     /////////////
     let game_bundle_style = Style {
         width: Val::Percent(100.0),
@@ -76,11 +71,11 @@ fn game_setup(
 #[allow(clippy::needless_pass_by_value)]
 fn game(
     time: Res<Time>,
-    mut game_state: ResMut<NextState<components::GameState>>,
+    mut game_state: ResMut<NextState<crate::GameState>>,
     mut timer: ResMut<GameTimer>,
 ) {
     if timer.tick(time.delta()).finished() {
-        game_state.set(components::GameState::Menu);
+        game_state.set(crate::GameState::Menu);
     }
 }
 

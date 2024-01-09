@@ -1,5 +1,5 @@
-use crate::menu::components::GameState;
-use crate::menu::util;
+use crate::util;
+use crate::GameState;
 use bevy::prelude::*;
 
 #[derive(Component)]
@@ -17,7 +17,7 @@ impl Plugin for SplashPlugin {
             .add_systems(Update, countdown.run_if(in_state(GameState::Splash)))
             .add_systems(
                 OnExit(GameState::Splash),
-                util::despawn_screen::<OnSplashScreen>,
+                util::spawn::despawn_screen::<OnSplashScreen>,
             );
     }
 }
