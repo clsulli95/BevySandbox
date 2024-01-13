@@ -1,4 +1,5 @@
 pub mod game;
+pub mod menu;
 pub mod settings;
 pub mod splash;
 pub mod util;

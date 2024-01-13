@@ -16,6 +16,7 @@ pub struct SettingsPlugin;
 impl Plugin for SettingsPlugin {
     fn build(&self, app: &mut App) {
         app.insert_resource(DisplayQuality::Medium)
+            .insert_resource(Volume(7))
             .insert_resource(Volume(7));
     }
 }
